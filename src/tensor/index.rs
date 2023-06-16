@@ -54,7 +54,7 @@
 //! underlying storage, while NumPy may copy the tensor in certain scenarios.
 use crate::{TchError, Tensor};
 use std::ops::{
-    Bound, Range, RangeBounds, RangeFrom, RangeFull, RangeInclusive, RangeTo, RangeToInclusive,
+    Bound, Range, RangeBounds, RangeFrom, RangeFull, RangeInclusive, RangeTo, RangeToInclusive, Index,
 };
 
 #[derive(Debug, PartialEq, Eq)]
@@ -255,6 +255,17 @@ where
         self.indexer(&[idx_a, idx_b, idx_c, idx_d, idx_e, idx_f, idx_g])
     }
 }
+
+impl <A> Index <A> for Tensor
+where  
+    A: Into<TensorIndexer>,{
+    type Output = Tensor;
+    fn index(&self, index: A) -> Tensor {
+        let x = self.i(index);
+        return x;
+    }
+}
+
 
 impl Tensor {
     fn f_indexer(&self, index_spec: &[TensorIndexer]) -> Result<Tensor, TchError> {
